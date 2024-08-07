@@ -55,31 +55,4 @@ extension FotogroepWaalreMembersProvider { // fill with some initial hard-coded 
         }
 
     }
-
-    private func addMember(bgContext: NSManagedObjectContext,
-                           personName: PersonName,
-                           bornDT: Date? = nil,
-                           organization: Organization,
-                           memberRolesAndStatus: MemberRolesAndStatus = MemberRolesAndStatus(role: [:], stat: [:]),
-                           memberWebsite: URL? = nil,
-                           latestImage: URL? = nil) {
-
-        let photographer = Photographer.findCreateUpdate(
-                           context: bgContext,
-                           personName: PersonName(givenName: personName.givenName,
-                                                  infixName: personName.infixName,
-                                                  familyName: personName.familyName),
-                           memberRolesAndStatus: memberRolesAndStatus,
-                           bornDT: bornDT,
-                           organization: organization)
-
-        _ = MemberPortfolio.findCreateUpdate(
-                            bgContext: bgContext,
-                            organization: organization, photographer: photographer,
-                            memberRolesAndStatus: memberRolesAndStatus,
-                            memberWebsite: memberWebsite,
-                            latestImage: latestImage
-                            )
-        // do not need to bgContext.save() because a series of hardcoded members will be saved simultaneously
-    }
 }
