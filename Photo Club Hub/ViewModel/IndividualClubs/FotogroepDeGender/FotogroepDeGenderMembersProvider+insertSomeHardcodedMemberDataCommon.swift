@@ -43,39 +43,72 @@ extension FotogroepDeGenderMembersProvider { // fill with some initial hard-code
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         let bornDT = dateFormatter.date(from: isoDate)!
-
-        // add Mariet to members of de Gender
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Mariet", infixName: "", familyName: "Wielders"),
-                  website: URL(string: "https://www.m3w.nl"),
-                  bornDT: bornDT,
-                  organization: clubDeGender,
-                  memberRolesAndStatus: MemberRolesAndStatus(role: [.chairman: false]),
-                  memberWebsite: URL(string: "https://www.fcdegender.nl/wp-content/uploads/Expositie%202023/Mariet/"),
-                  latestImage: URL(string:
-                     "https://www.fcdegender.nl/wp-content/uploads/Expositie%202023/Mariet/slides/Mariet%203.jpg")
-        )
-
-        // add Peter to members of de Gender
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Peter", infixName: "van den", familyName: "Hamer"),
-                  organization: clubDeGender,
-                  memberRolesAndStatus: MemberRolesAndStatus(stat: [.prospective: false]),
-                  memberWebsite: URL(string: FotogroepWaalreMembersProvider.baseURL + "Empty_Website/"),
-                  latestImage: URL(string:
-                     "http://www.vdhamer.com/wp-content/uploads/2024/04/2023_Cornwall_R5_581-Pano.jpg")
-        )
-
-        // add Peter to members of de Gender
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Bettina", infixName: "de", familyName: "Graaf"),
-                  organization: clubDeGender,
-                  memberRolesAndStatus: MemberRolesAndStatus(stat: [.prospective: false]),
-                  memberWebsite: URL(string: FotogroepWaalreMembersProvider.baseURL + "Empty_Website/"),
-                  latestImage: URL(string:
-                     "http://www.vdhamer.com/wp-content/uploads/2023/11/BettinaDeGraaf.jpeg")
-        )
-
+        
+        let members: [(
+            givenName: String,
+            infixName: String,
+            familyName: String,
+            website: URL?,
+            bornDT: Date?,
+            organization: Organization,
+            rolesAndStatus: MemberRolesAndStatus,
+            memberWebsite: URL?,
+            latestImage: URL?,
+            latestThumbnail: URL?,
+            eMail: String?)] = [
+                (
+                    givenName: "Mariet",
+                    infixName: "",
+                    familyName: "Wielders",
+                    website: URL(string: "https://www.m3w.nl"),
+                    bornDT: bornDT,
+                    organization: clubDeGender,
+                    rolesAndStatus: MemberRolesAndStatus(role: [.chairman: false], stat: [:]),
+                    memberWebsite: URL(string: "https://www.fcdegender.nl/wp-content/uploads/Expositie%202023/Mariet/"),
+                    latestImage: URL(string: "https://www.fcdegender.nl/wp-content/uploads/Expositie%202023/Mariet/slides/Mariet%203.jpg"),
+                    latestThumbnail: nil,
+                    eMail: nil
+                ),
+                (
+                    givenName: "Peter",
+                    infixName: "van den",
+                    familyName: "Hamer",
+                    website: nil,
+                    bornDT: nil,
+                    organization: clubDeGender,
+                    rolesAndStatus: MemberRolesAndStatus(role: [:], stat: [.prospective: false]),
+                    memberWebsite: URL(string: FotogroepWaalreMembersProvider.baseURL + "Empty_Website/"),
+                    latestImage: URL(string: "http://www.vdhamer.com/wp-content/uploads/2024/04/2023_Cornwall_R5_581-Pano.jpg"),
+                    latestThumbnail: nil,
+                    eMail: nil
+                ),
+                (
+                    givenName: "Bettina",
+                    infixName: "de",
+                    familyName: "Graaf",
+                    website: nil,
+                    bornDT: nil,
+                    organization: clubDeGender,
+                    rolesAndStatus: MemberRolesAndStatus(role: [:], stat: [.prospective: false]),
+                    memberWebsite: URL(string: FotogroepWaalreMembersProvider.baseURL + "Empty_Website/"),
+                    latestImage: URL(string: "http://www.vdhamer.com/wp-content/uploads/2023/11/BettinaDeGraaf.jpeg"),
+                    latestThumbnail: nil,
+                    eMail: nil
+                )
+            ]
+        
+        for member in members {
+            addMember(bgContext: bgContext,
+                      personName: PersonName(givenName: member.0, infixName: member.1, familyName: member.2),
+                      website: member.3,
+                      bornDT: member.4,
+                      organization: member.5,
+                      memberRolesAndStatus: member.6,
+                      memberWebsite: member.7,
+                      latestImage: member.8,
+                      latestThumbnail: member.9,
+                      eMail: member.10)
+        }
     }
 
     private func addMember(bgContext: NSManagedObjectContext,

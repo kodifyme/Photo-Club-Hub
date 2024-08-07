@@ -44,25 +44,54 @@ extension BellusImagoMembersProvider { // fill with some initial hard-coded cont
                      """)
         clubBellusImago.hasHardCodedMemberData = true // store in database that we ran insertSomeHardcodedMembers...
 
-        addMember(bgContext: bgContext, // add Rico to Photographers and member of Bellus (if needed)
-                  personName: PersonName(givenName: "Rico", infixName: "", familyName: "Coolen"),
-                  website: URL(string: "https://www.ricoco.nl"),
-                  organization: clubBellusImago,
-                  memberWebsite: URL(string: "https://www.fotoclubbellusimago.nl/rico.html"),
-                  latestImage: URL(string:
-                     "https://www.fotoclubbellusimago.nl/uploads/5/5/1/2/55129719/vrijwerk-rico-3_orig.jpg"),
-                  eMail: "info@ricoco.nl"
-        )
-
-        addMember(bgContext: bgContext, // add Loek to Photographers and member of Bellus (if needed)
-                  personName: PersonName(givenName: "Loek", infixName: "", familyName: "Dirkx"),
-                  organization: clubBellusImago,
-                  memberRolesAndStatus: MemberRolesAndStatus(role: [ .chairman: true ]),
-                  memberWebsite: URL(string: "https://www.fotoclubbellusimago.nl/loek.html"),
-                  latestImage: URL(string:
-                     "https://www.fotoclubbellusimago.nl/uploads/5/5/1/2/55129719/vrijwerk-loek-1_2_orig.jpg")
-        )
-
+        let members: [(
+            givenName: String,
+            infixName: String,
+            familyName: String,
+            website: URL?,
+            organization: Organization,
+            rolesAndStatus: MemberRolesAndStatus,
+            memberWebsite: URL?,
+            latestImage: URL?,
+            latestThumbnail: URL?,
+            eMail: String?)] = [
+                (
+                    givenName: "Rico",
+                    infixName: "",
+                    familyName: "Coolen",
+                    website: URL(string: "https://www.ricoco.nl"),
+                    organization: clubBellusImago,
+                    rolesAndStatus: MemberRolesAndStatus(role: [:], stat: [:]),
+                    memberWebsite: URL(string: "https://www.fotoclubbellusimago.nl/rico.html"),
+                    latestImage: URL(string: "https://www.fotoclubbellusimago.nl/uploads/5/5/1/2/55129719/vrijwerk-rico-3_orig.jpg"),
+                    latestThumbnail: nil,
+                    eMail: "info@ricoco.nl"
+                ),
+                (
+                    givenName: "Loek",
+                    infixName: "",
+                    familyName: "Dirkx",
+                    website: nil,
+                    organization: clubBellusImago,
+                    rolesAndStatus: MemberRolesAndStatus(role: [ .chairman: true ], stat: [:]),
+                    memberWebsite: URL(string: "https://www.fotoclubbellusimago.nl/loek.html"),
+                    latestImage: URL(string: "https://www.fotoclubbellusimago.nl/uploads/5/5/1/2/55129719/vrijwerk-loek-1_2_orig.jpg"),
+                    latestThumbnail: nil,
+                    eMail: nil
+                )
+            ]
+        
+        for member in members {
+            addMember(bgContext: bgContext,
+                      personName: PersonName(givenName: member.0, infixName: member.1, familyName: member.2),
+                      website: member.3,
+                      organization: member.4,
+                      memberRolesAndStatus: member.5,
+                      memberWebsite: member.6,
+                      latestImage: member.7,
+                      latestThumbnail: member.8,
+                      eMail: member.9)
+        }
     }
 
     private func addMember(bgContext: NSManagedObjectContext,

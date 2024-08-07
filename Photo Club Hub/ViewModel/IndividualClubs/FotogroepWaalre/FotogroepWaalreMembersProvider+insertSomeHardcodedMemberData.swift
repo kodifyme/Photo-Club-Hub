@@ -22,36 +22,23 @@ extension FotogroepWaalreMembersProvider { // fill with some initial hard-coded 
                      Starting insertSomeHardcodedMemberData() in background
                      """)
         clubWaalre.hasHardCodedMemberData = true // store in database that we ran insertSomeHardcodedMembers...
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Carel", infixName: "", familyName: "Bullens"),
-                  organization: clubWaalre,
-                  memberRolesAndStatus: MemberRolesAndStatus(role: [ .viceChairman: true ], stat: [:]))
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Erik", infixName: "van", familyName: "Geest"),
-                  organization: clubWaalre, memberRolesAndStatus: MemberRolesAndStatus(role: [ .admin: true ]))
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Henriëtte", infixName: "van", familyName: "Ekert"),
-                  organization: clubWaalre, memberRolesAndStatus: MemberRolesAndStatus(role: [ .admin: true ]))
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Jos", infixName: "", familyName: "Jansen"),
-                  organization: clubWaalre, memberRolesAndStatus: MemberRolesAndStatus(role: [ .treasurer: true ]))
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Kees", infixName: "van", familyName: "Gemert"),
-                  organization: clubWaalre, memberRolesAndStatus: MemberRolesAndStatus(role: [ .secretary: true ]))
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Marijke", infixName: "", familyName: "Gallas"),
-                  organization: clubWaalre,
-                  memberRolesAndStatus: MemberRolesAndStatus(role: [:], stat: [ .honorary: true ]))
-
-        addMember(bgContext: bgContext,
-                  personName: PersonName(givenName: "Miek", infixName: "", familyName: "Kerkhoven"),
-                  organization: clubWaalre, memberRolesAndStatus: MemberRolesAndStatus(role: [ .chairman: true ]))
+        
+        let members = [
+            ("Carel", "", "Bullens", [MemberRole.viceChairman: true], [:]),
+            ("Erik", "van", "Geest", [MemberRole.admin: true], [:]),
+            ("Henriëtte", "van", "Ekert", [MemberRole.admin: true], [:]),
+            ("Jos", "", "Jansen", [MemberRole.treasurer: true], [:]),
+            ("Kees", "van", "Gemert", [MemberRole.secretary: true], [:]),
+            ("Marijke", "", "Gallas", [:], [MemberStatus.honorary: true]),
+            ("Miek", "", "Kerkhoven", [MemberRole.chairman: true], [:])
+        ]
+        
+        for member in members {
+            addMember(bgContext: bgContext,
+                      personName: PersonName(givenName: member.0, infixName: member.1, familyName: member.2),
+                      organization: clubWaalre,
+                      memberRolesAndStatus: MemberRolesAndStatus(role: member.3, stat: member.4))
+        }
 
         do {
             if Settings.extraCoreDataSaves && bgContext.hasChanges { // hasChanges is for optimization only
